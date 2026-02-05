@@ -16,16 +16,16 @@ import {
 import { load } from "js-yaml";
 import rules from "./rules.json" with { type: "json" };
 import {
-    KNOWN_FIELDS,
-    VALID_TARGETS,
     type ActionInputs,
     type AgentFrontmatter,
     type FileValidationResult,
     type Handoff,
+    KNOWN_FIELDS,
     type ParseResult,
     type PathResolutionResult,
     type RuleId,
     type RuleSeverity,
+    VALID_TARGETS,
     type ValidateOptions,
     type ValidationIssue,
 } from "./types.js";
@@ -43,7 +43,7 @@ const createIssue = (
     ruleId: RuleId,
     detail: string | null,
     file?: string,
-    line?: number
+    line?: number,
 ): ValidationIssue => {
     const rule = rules[ruleId as keyof typeof rules];
     let message = rule.message;
@@ -76,7 +76,7 @@ const addIssue = (
     warnings: ValidationIssue[],
     ignoreRules: string[],
     file?: string,
-    line?: number
+    line?: number,
 ): void => {
     if (ignoreRules.includes(ruleId)) {
         return;
@@ -169,7 +169,7 @@ const resolveAgentPaths = (inputPath: string): PathResolutionResult => {
 };
 
 const extractFrontmatter = (
-    content: string
+    content: string,
 ): { frontmatter: string | null; body: string } => {
     const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/;
     const match = content.match(frontmatterRegex);
@@ -256,7 +256,7 @@ const validateDescription = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (description === undefined || description === null) {
         addIssue("description-format", null, errors, warnings, ignoreRules, file);
@@ -270,7 +270,7 @@ const validateDescription = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
         return;
     }
@@ -287,7 +287,7 @@ const validateDescription = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
     }
 };
@@ -297,7 +297,7 @@ const validateName = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (name === undefined || name === null) {
         return;
@@ -313,7 +313,7 @@ const validateArgumentHint = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (hint === undefined || hint === null) {
         return;
@@ -329,7 +329,7 @@ const validateTools = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (tools === undefined || tools === null) {
         return;
@@ -342,7 +342,7 @@ const validateTools = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
         return;
     }
@@ -355,7 +355,7 @@ const validateTools = (
                 errors,
                 warnings,
                 ignoreRules,
-                file
+                file,
             );
         }
     }
@@ -366,7 +366,7 @@ const validateAgents = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (agents === undefined || agents === null) {
         return;
@@ -383,7 +383,7 @@ const validateAgents = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
         return;
     }
@@ -396,7 +396,7 @@ const validateAgents = (
                 errors,
                 warnings,
                 ignoreRules,
-                file
+                file,
             );
         }
     }
@@ -407,7 +407,7 @@ const validateModel = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (model === undefined || model === null) {
         return;
@@ -426,7 +426,7 @@ const validateModel = (
                     errors,
                     warnings,
                     ignoreRules,
-                    file
+                    file,
                 );
             }
         }
@@ -439,7 +439,7 @@ const validateModel = (
         errors,
         warnings,
         ignoreRules,
-        file
+        file,
     );
 };
 
@@ -449,7 +449,7 @@ const validateBooleanField = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (value === undefined || value === null) {
         return;
@@ -465,7 +465,7 @@ const validateTarget = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (target === undefined || target === null) {
         return;
@@ -478,7 +478,7 @@ const validateTarget = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
     }
 };
@@ -488,7 +488,7 @@ const validateMcpServers = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (mcpServers === undefined || mcpServers === null) {
         return;
@@ -505,7 +505,7 @@ const validateHandoff = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (typeof handoff !== "object" || handoff === null) {
         addIssue(
@@ -514,7 +514,7 @@ const validateHandoff = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
         return;
     }
@@ -528,7 +528,7 @@ const validateHandoff = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
     }
 
@@ -539,7 +539,7 @@ const validateHandoff = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
     }
 
@@ -550,7 +550,7 @@ const validateHandoff = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
     }
 
@@ -561,7 +561,7 @@ const validateHandoff = (
             errors,
             warnings,
             ignoreRules,
-            file
+            file,
         );
     }
 };
@@ -571,7 +571,7 @@ const validateHandoffs = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (handoffs === undefined || handoffs === null) {
         return;
@@ -592,7 +592,7 @@ const validateInfer = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (infer !== undefined) {
         addIssue("infer-deprecated", null, errors, warnings, ignoreRules, file);
@@ -604,7 +604,7 @@ const validateUnknownFields = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     for (const key of Object.keys(data)) {
         if (!KNOWN_FIELDS.has(key)) {
@@ -618,7 +618,7 @@ const validateBody = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     if (!body || body.trim().length === 0) {
         addIssue("body-empty", null, errors, warnings, ignoreRules, file);
@@ -627,7 +627,14 @@ const validateBody = (
 
     const lines = body.split("\n").length;
     if (lines > BODY_MAX_LINES) {
-        addIssue("body-too-long", String(lines), errors, warnings, ignoreRules, file);
+        addIssue(
+            "body-too-long",
+            String(lines),
+            errors,
+            warnings,
+            ignoreRules,
+            file,
+        );
     }
 };
 
@@ -637,12 +644,12 @@ const validateFileReferences = (
     errors: ValidationIssue[],
     warnings: ValidationIssue[],
     ignoreRules: string[],
-    file: string
+    file: string,
 ): void => {
     const linkRegex = /\[([^\]]*)\]\(([^)]+)\)/g;
-    let match: RegExpExecArray | null;
+    let match: RegExpExecArray | null = linkRegex.exec(body);
 
-    while ((match = linkRegex.exec(body)) !== null) {
+    while (match !== null) {
         const linkPath = match[2];
 
         if (
@@ -650,6 +657,7 @@ const validateFileReferences = (
             linkPath.startsWith("https://") ||
             linkPath.startsWith("#")
         ) {
+            match = linkRegex.exec(body);
             continue;
         }
 
@@ -662,15 +670,16 @@ const validateFileReferences = (
                 errors,
                 warnings,
                 ignoreRules,
-                file
+                file,
             );
         }
+        match = linkRegex.exec(body);
     }
 };
 
 const validateAgentFile = (
     filePath: string,
-    options: ValidateOptions
+    options: ValidateOptions,
 ): FileValidationResult => {
     const errors: ValidationIssue[] = [];
     const warnings: ValidationIssue[] = [];
@@ -687,7 +696,7 @@ const validateAgentFile = (
         const issue = createIssue(
             parseResult.error.ruleId || "frontmatter-required",
             parseResult.error.message,
-            filePath
+            filePath,
         );
         errors.push(issue);
         return {
@@ -700,16 +709,48 @@ const validateAgentFile = (
 
     const { data, body } = parseResult;
 
-    validateDescription(data.description, errors, warnings, ignoreRules, filePath);
+    validateDescription(
+        data.description,
+        errors,
+        warnings,
+        ignoreRules,
+        filePath,
+    );
     validateName(data.name, errors, warnings, ignoreRules, filePath);
-    validateArgumentHint(data["argument-hint"], errors, warnings, ignoreRules, filePath);
+    validateArgumentHint(
+        data["argument-hint"],
+        errors,
+        warnings,
+        ignoreRules,
+        filePath,
+    );
     validateTools(data.tools, errors, warnings, ignoreRules, filePath);
     validateAgents(data.agents, errors, warnings, ignoreRules, filePath);
     validateModel(data.model, errors, warnings, ignoreRules, filePath);
-    validateBooleanField(data["user-invokable"], "user-invokable-format", errors, warnings, ignoreRules, filePath);
-    validateBooleanField(data["disable-model-invocation"], "disable-model-invocation-format", errors, warnings, ignoreRules, filePath);
+    validateBooleanField(
+        data["user-invokable"],
+        "user-invokable-format",
+        errors,
+        warnings,
+        ignoreRules,
+        filePath,
+    );
+    validateBooleanField(
+        data["disable-model-invocation"],
+        "disable-model-invocation-format",
+        errors,
+        warnings,
+        ignoreRules,
+        filePath,
+    );
     validateTarget(data.target, errors, warnings, ignoreRules, filePath);
-    validateMcpServers(data["mcp-servers"], errors, warnings, ignoreRules, filePath);
+    validateMcpServers(
+        data["mcp-servers"],
+        errors,
+        warnings,
+        ignoreRules,
+        filePath,
+    );
     validateHandoffs(data.handoffs, errors, warnings, ignoreRules, filePath);
     validateInfer(data.infer, errors, warnings, ignoreRules, filePath);
     validateUnknownFields(data, errors, warnings, ignoreRules, filePath);
@@ -717,7 +758,14 @@ const validateAgentFile = (
 
     if (checkRefs) {
         const agentDir = path.dirname(filePath);
-        validateFileReferences(body, agentDir, errors, warnings, ignoreRules, filePath);
+        validateFileReferences(
+            body,
+            agentDir,
+            errors,
+            warnings,
+            ignoreRules,
+            filePath,
+        );
     }
 
     return {
@@ -757,7 +805,10 @@ const run = async (): Promise<void> => {
         if (!pathResult.success) {
             setFailed(pathResult.error.message);
             setOutput("valid", "false");
-            setOutput("errors", JSON.stringify([{ message: pathResult.error.message }]));
+            setOutput(
+                "errors",
+                JSON.stringify([{ message: pathResult.error.message }]),
+            );
             setOutput("warnings", JSON.stringify([]));
             setOutput("files-validated", "0");
             return;
@@ -828,7 +879,7 @@ const run = async (): Promise<void> => {
                 setFailed(`Validation failed with ${allErrors.length} error(s)`);
             } else if (inputs.failOnWarning && hasWarnings) {
                 setFailed(
-                    `Validation failed with ${allWarnings.length} warning(s) (fail-on-warning enabled)`
+                    `Validation failed with ${allWarnings.length} warning(s) (fail-on-warning enabled)`,
                 );
             }
         } else {

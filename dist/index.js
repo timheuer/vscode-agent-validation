@@ -31688,18 +31688,20 @@ const validateBody = (body, errors, warnings, ignoreRules, file) => {
 };
 const validateFileReferences = (body, agentDir, errors, warnings, ignoreRules, file) => {
     const linkRegex = /\[([^\]]*)\]\(([^)]+)\)/g;
-    let match;
-    while ((match = linkRegex.exec(body)) !== null) {
+    let match = linkRegex.exec(body);
+    while (match !== null) {
         const linkPath = match[2];
         if (linkPath.startsWith("http://") ||
             linkPath.startsWith("https://") ||
             linkPath.startsWith("#")) {
+            match = linkRegex.exec(body);
             continue;
         }
         const resolvedPath = external_node_path_default().resolve(agentDir, linkPath);
         if (!external_node_fs_default().existsSync(resolvedPath)) {
             addIssue("reference-not-found", linkPath, errors, warnings, ignoreRules, file);
         }
+        match = linkRegex.exec(body);
     }
 };
 const validateAgentFile = (filePath, options) => {
